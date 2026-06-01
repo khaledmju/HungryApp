@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hungry/views/home_page.dart';
+import 'package:hungry/splash.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,6 +11,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Hungry', home: HomePage());
+    return MaterialApp(
+      title: 'Hungry',
+      debugShowCheckedModeBanner: false,
+      home: SplashView(),
+    );
   }
 }

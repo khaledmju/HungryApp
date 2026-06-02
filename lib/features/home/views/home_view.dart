@@ -22,36 +22,45 @@ class _HomeViewState extends State<HomeView> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                Gap(70),
-                UserHeader(),
-                Gap(20),
-                SearchField(),
-                Gap(20),
-                FoodCategory(category: category, selectedIndex: selectedIndex),
-                Gap(20),
-                GridView.builder(
-                  padding: EdgeInsets.zero,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 6,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.7,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemBuilder: (context, index) {
-                    return CardItem();
-                  },
+        body: CustomScrollView(
+          slivers: [
+            /// header
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  children: [
+                    Gap(70),
+                    UserHeader(),
+                    Gap(20),
+                    SearchField(),
+                    Gap(20),
+                    FoodCategory(
+                      category: category,
+                      selectedIndex: selectedIndex,
+                    ),
+                    Gap(20),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              sliver: SliverGrid(
+                delegate: SliverChildBuilderDelegate(
+                  childCount: 6,
+                  (context, index) => CardItem(),
+                ),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 0.7,
+                  crossAxisSpacing: 4,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

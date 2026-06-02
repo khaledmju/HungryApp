@@ -24,16 +24,30 @@ class _HomeViewState extends State<HomeView> {
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
-            /// header
+            SliverAppBar(
+              backgroundColor: Colors.white,
+              pinned: true,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              // height of app bar
+              toolbarHeight: 160,
+              automaticallyImplyLeading: false,
+              flexibleSpace: Padding(
+                padding: const EdgeInsets.only(top: 45, right: 20, left: 20),
+                child: Column(children: [UserHeader(), Gap(20), SearchField()]),
+              ),
+            ),
+
+            /// category
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    Gap(70),
-                    UserHeader(),
-                    Gap(20),
-                    SearchField(),
+                    // Gap(70),
+                    // UserHeader(),
+                    // Gap(20),
+                    // SearchField(),
                     Gap(20),
                     FoodCategory(
                       category: category,
@@ -45,8 +59,9 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
 
+            /// grid view
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               sliver: SliverGrid(
                 delegate: SliverChildBuilderDelegate(
                   childCount: 6,

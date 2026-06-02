@@ -15,6 +15,8 @@ class SearchField extends StatelessWidget {
       child: TextField(
         cursorColor: AppColors.primary,
         decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
           hintText: 'Search...',
           prefixIcon: Icon(CupertinoIcons.search),
           enabledBorder: OutlineInputBorder(

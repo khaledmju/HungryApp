@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:hungry/core/constants/app_colors.dart';
 import 'package:hungry/features/cart/widgets/cart_item.dart';
 
 import '../../../shared/custom_button.dart';
@@ -29,7 +27,7 @@ class _CartViewState extends State<CartView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         child: ListView.builder(
           padding: EdgeInsets.only(top: 50, bottom: 120),
           itemCount: itemCount,

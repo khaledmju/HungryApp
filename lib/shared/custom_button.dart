@@ -4,27 +4,40 @@ import '../core/constants/app_colors.dart';
 import 'custom_text.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key, required this.text, this.onTap});
+  const CustomButton({
+    super.key,
+    required this.text,
+    this.onTap,
+    this.width,
+    this.color,
+  });
 
   final String text;
 
   final Function()? onTap;
+
+  final double? width;
+
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+        width: width,
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         decoration: BoxDecoration(
-          color: AppColors.primary,
+          color: color ?? AppColors.primary,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: CustomText(
-          text: text,
-          textWeight: FontWeight.w600,
-          textSize: 18,
-          textColor: Colors.white,
+        child: Center(
+          child: CustomText(
+            text: text,
+            textWeight: FontWeight.w600,
+            textSize: 18,
+            textColor: Colors.white,
+          ),
         ),
       ),
     );

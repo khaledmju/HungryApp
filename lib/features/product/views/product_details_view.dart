@@ -45,7 +45,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
       //     ],
       //   ),
       // ),
-      appBar: AppBar(backgroundColor: Colors.white),
+      appBar: AppBar(scrolledUnderElevation: 0, backgroundColor: Colors.white),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(

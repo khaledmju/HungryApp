@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+
+import '../../../core/constants/app_colors.dart';
+import '../../../shared/custom_text.dart';
+
+class CartItem extends StatelessWidget {
+  const CartItem({
+    super.key,
+    required this.image,
+    required this.title,
+    required this.desc,
+    this.onAdd,
+    this.onMin,
+    this.onRemove,
+    required this.number,
+  });
+
+  final String image, title, desc;
+
+  final Function()? onAdd;
+  final Function()? onMin;
+  final Function()? onRemove;
+  final String number;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                Image.asset(image, width: 100),
+
+                CustomText(text: title, textWeight: FontWeight.bold),
+                CustomText(text: desc),
+              ],
+            ),
+
+            Column(
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: onAdd,
+                      child: CircleAvatar(
+                        backgroundColor: AppColors.primary,
+                        child: Icon(Icons.add, color: Colors.white),
+                      ),
+                    ),
+                    Gap(20),
+                    CustomText(
+                      text: number,
+                      textWeight: FontWeight.w400,
+                      textSize: 20,
+                    ),
+                    Gap(20),
+
+                    GestureDetector(
+                      onTap: onMin,
+                      child: CircleAvatar(
+                        backgroundColor: AppColors.primary,
+                        child: Icon(Icons.remove, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+                Gap(26),
+                GestureDetector(
+                  onTap: onRemove,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                    // height: 45,
+                    // width: 130,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: CustomText(
+                      text: "remove",
+                      textColor: Colors.white,
+                      textSize: 18,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

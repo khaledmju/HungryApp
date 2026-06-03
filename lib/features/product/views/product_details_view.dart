@@ -19,32 +19,42 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // bottomNavigationBar: Container(
-      //   padding: EdgeInsets.only(right: 20, left: 20,bottom: 20),
-      //   height: 100,
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //     children: [
-      //       Column(
-      //         crossAxisAlignment: CrossAxisAlignment.start,
-      //         children: [
-      //           CustomText(
-      //             text: "Total",
-      //             textSize: 18,
-      //             textWeight: FontWeight.w600,
-      //           ),
-      //           CustomText(
-      //             text: "\$18.19",
-      //             textSize: 30,
-      //             textWeight: FontWeight.w400,
-      //           ),
-      //         ],
-      //       ),
-      //
-      //       CustomButton(text: "Add To Cart", onTap: () {}),
-      //     ],
-      //   ),
-      // ),
+      bottomSheet: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(30),
+            topLeft: Radius.circular(30),
+          ),
+          boxShadow: [
+            BoxShadow(color: Colors.grey, blurRadius: 15, offset: Offset(0, 0)),
+          ],
+        ),
+        height: 100,
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(
+                  text: "Total",
+                  textSize: 16,
+                  textWeight: FontWeight.w600,
+                ),
+                CustomText(
+                  text: "\$18.19",
+                  textSize: 25,
+                  textWeight: FontWeight.w400,
+                ),
+              ],
+            ),
+
+            CustomButton(text: "Add To Cart", onTap: () {}),
+          ],
+        ),
+      ),
       appBar: AppBar(scrolledUnderElevation: 0, backgroundColor: Colors.white),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -102,29 +112,29 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   ),
                 ),
               ),
-              Gap(50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomText(
-                        text: "Total",
-                        textSize: 18,
-                        textWeight: FontWeight.w600,
-                      ),
-                      CustomText(
-                        text: "\$18.19",
-                        textSize: 30,
-                        textWeight: FontWeight.w400,
-                      ),
-                    ],
-                  ),
-
-                  CustomButton(text: "Add To Cart", onTap: () {}),
-                ],
-              ),
+              // Gap(50),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         CustomText(
+              //           text: "Total",
+              //           textSize: 18,
+              //           textWeight: FontWeight.w600,
+              //         ),
+              //         CustomText(
+              //           text: "\$18.19",
+              //           textSize: 30,
+              //           textWeight: FontWeight.w400,
+              //         ),
+              //       ],
+              //     ),
+              //
+              //     CustomButton(text: "Add To Cart", onTap: () {}),
+              //   ],
+              // ),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hungry/features/cart/widgets/cart_item.dart';
+import 'package:hungry/features/checkout/views/checkout_view.dart';
 
 import '../../../shared/custom_button.dart';
 import '../../../shared/custom_text.dart';
@@ -57,9 +58,12 @@ class _CartViewState extends State<CartView> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(12),
-            topLeft: Radius.circular(12),
+            topRight: Radius.circular(30),
+            topLeft: Radius.circular(30),
           ),
+          boxShadow: [
+            BoxShadow(color: Colors.grey, blurRadius: 15, offset: Offset(0, 0)),
+          ],
         ),
         height: 100,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -82,7 +86,15 @@ class _CartViewState extends State<CartView> {
               ],
             ),
 
-            CustomButton(text: "CheckOut", onTap: () {}),
+            CustomButton(
+              text: "CheckOut",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CheckoutView()),
+                );
+              },
+            ),
           ],
         ),
       ),

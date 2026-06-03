@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:hungry/root.dart';
+import 'package:flutter/services.dart';
 import 'package:hungry/splash.dart';
 
 import 'features/auth/views/signup_view.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // this is to make user cant make the screen in landScape mode
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(const MyApp());
 }
 
@@ -16,8 +21,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Hungry',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
-      home: Root(),
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        splashColor: Colors.transparent,
+      ),
+      home: SplashView(),
     );
   }
 }

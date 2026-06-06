@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hungry/splash.dart';
 
-import 'features/auth/views/signup_view.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

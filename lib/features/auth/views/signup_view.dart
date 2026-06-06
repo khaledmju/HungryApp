@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:hungry/features/auth/views/login_view.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/custom_text.dart';
@@ -21,53 +22,89 @@ class SignupView extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: AppColors.primary,
+        backgroundColor: Colors.white,
         body: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  Gap(100),
-                  SvgPicture.asset("assets/logo/logo.svg"),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                Gap(200),
+                SvgPicture.asset(
+                  "assets/logo/logo.svg",
+                  color: AppColors.primary,
+                ),
+                Gap(10),
+                CustomText(
+                  text: "Welcome to our Food App",
+                  textColor: AppColors.primary,
+                  textSize: 13,
+                  textWeight: FontWeight.w400,
+                ),
+                Gap(100),
 
-                  Gap(40),
-                  CustomTextField(
-                    controller: nameController,
-                    hint: "Name",
-                    isPassword: false,
-                  ),
-                  Gap(20),
-                  CustomTextField(
-                    controller: emailController,
-                    hint: "Email Address",
-                    isPassword: false,
-                  ),
-                  Gap(20),
-                  CustomTextField(
-                    controller: passwordController,
-                    hint: "Password",
-                    isPassword: true,
-                  ),
-                  Gap(20),
-                  CustomTextField(
-                    controller: confirmPasswordController,
-                    hint: "Confirm Password",
-                    isPassword: true,
-                  ),
-                  Gap(40),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(25),
+                        topLeft: Radius.circular(25),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Gap(40),
 
-                  CustomAuthButton(
-                    text: "SingUp",
-                    onTap: () {
-                      if (formKey.currentState!.validate()) {
-                        print("object");
-                      }
-                    },
+                          CustomTextField(
+                            controller: nameController,
+                            hint: "Name",
+                            isPassword: false,
+                          ),
+                          Gap(20),
+                          CustomTextField(
+                            controller: emailController,
+                            hint: "Email Address",
+                            isPassword: false,
+                          ),
+                          Gap(20),
+                          CustomTextField(
+                            controller: passwordController,
+                            hint: "Password",
+                            isPassword: true,
+                          ),
+                          Gap(40),
+
+                          CustomAuthButton(
+                            text: "SingUp",
+
+                            color: Colors.transparent,
+                            textColor: Colors.white,
+                            onTap: () {
+                              if (formKey.currentState!.validate()) {
+                                print("object");
+                              }
+                            },
+                          ),
+                          Gap(20),
+                          CustomAuthButton(
+                            text: "Go To Login",
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginView(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

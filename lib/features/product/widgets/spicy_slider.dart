@@ -28,27 +28,27 @@ class _SpicySliderState extends State<SpicySlider> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomText(
+            const CustomText(
               text:
                   "Customize Your Burger\n to Your Tastes.\n Ultimate Experience",
             ),
-            Gap(20),
-            CustomText(
+            const Gap(20),
+            const CustomText(
               text: "Spicy",
               textWeight: FontWeight.bold,
               textSize: 15,
             ),
-            Gap(5),
+            const Gap(5),
             Slider(
               padding: EdgeInsets.zero,
-              inactiveColor: Color(0xff7D7D7D47),
+              inactiveColor: const Color(0xff7d7d7d47),
               activeColor: AppColors.primary,
               min: 0,
               max: 1,
               value: widget.sliderValue,
               onChanged: widget.onChanged,
             ),
-            Row(
+            const Row(
               mainAxisSize: MainAxisSize.max,
               children: [
                 CustomText(text: "🥶"),

@@ -44,12 +44,12 @@ class _FoodCategoryState extends State<FoodCategory> {
               setState(() => selectedIndex = index);
             },
             child: Container(
-              margin: EdgeInsets.only(right: 8),
-              padding: EdgeInsets.symmetric(horizontal: 27, vertical: 15),
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 15),
               decoration: BoxDecoration(
                 color: selectedIndex == index
                     ? AppColors.primary
-                    : Color(0xffF3F4F6),
+                    : const Color(0xffF3F4F6),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: CustomText(

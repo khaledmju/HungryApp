@@ -41,7 +41,7 @@ class OrderHistoryCard extends StatelessWidget {
               ],
             ),
 
-            Gap(20),
+            const Gap(20),
 
             CustomButton(
               text: "Order Again",

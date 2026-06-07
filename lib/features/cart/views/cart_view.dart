@@ -30,7 +30,7 @@ class _CartViewState extends State<CartView> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: ListView.builder(
-          padding: EdgeInsets.only(top: 50, bottom: 120),
+          padding: const EdgeInsets.only(top: 50, bottom: 120),
           itemCount: itemCount,
           itemBuilder: (context, index) => CartItem(
             image: "assets/test/test.png",
@@ -55,7 +55,7 @@ class _CartViewState extends State<CartView> {
       ),
 
       bottomSheet: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(30),
@@ -66,11 +66,11 @@ class _CartViewState extends State<CartView> {
           ],
         ),
         height: 100,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(
@@ -91,7 +91,7 @@ class _CartViewState extends State<CartView> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CheckoutView()),
+                  MaterialPageRoute(builder: (context) => const CheckoutView()),
                 );
               },
             ),

@@ -28,8 +28,9 @@ class _LoginViewState extends State<LoginView> {
   bool isLoading = false;
 
   Future<void> login() async {
-    setState(() => isLoading = true);
     if (formKey.currentState!.validate()) {
+      setState(() => isLoading = true);
+
       try {
         final user = await authRepo.login(
           emailController.text.trim(),
@@ -39,7 +40,7 @@ class _LoginViewState extends State<LoginView> {
         if (user != null) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => Root()),
+            MaterialPageRoute(builder: (context) => const Root()),
           );
         }
         setState(() => isLoading = false);
@@ -54,7 +55,12 @@ class _LoginViewState extends State<LoginView> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            clipBehavior: Clip.none,
+            elevation: 10,
+            padding: const EdgeInsets.all(10),
+            behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.red.shade900,
+            margin: const EdgeInsets.only(bottom: 30, right: 20, left: 20),
             content: CustomText(
               text: errMas,
               textColor: Colors.white,
@@ -77,25 +83,25 @@ class _LoginViewState extends State<LoginView> {
           key: formKey,
           child: Column(
             children: [
-              Gap(200),
+              const Gap(200),
               SvgPicture.asset(
                 "assets/logo/logo.svg",
                 color: AppColors.primary,
               ),
-              Gap(10),
+              const Gap(10),
               CustomText(
                 text: "Welcome Back, Discover Fast Food",
                 textColor: AppColors.primary,
                 textSize: 13,
                 textWeight: FontWeight.w400,
               ),
-              Gap(60),
+              const Gap(60),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   decoration: BoxDecoration(
                     color: AppColors.primary,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(25),
                       topLeft: Radius.circular(25),
                     ),
@@ -103,49 +109,53 @@ class _LoginViewState extends State<LoginView> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Gap(40),
+                        const Gap(40),
                         CustomTextField(
                           controller: emailController,
                           hint: "Email Address",
                           isPassword: false,
                         ),
-                        Gap(20),
+                        const Gap(20),
                         CustomTextField(
                           controller: passwordController,
                           hint: "Password",
                           isPassword: true,
                         ),
-                        Gap(40),
+                        const Gap(40),
 
                         isLoading
-                            ? CupertinoActivityIndicator(color: Colors.white)
+                            ? const CupertinoActivityIndicator(
+                          color: Colors.white,
+                        )
                             : CustomAuthButton(
-                                text: "Login",
-                                color: Colors.transparent,
-                                textColor: Colors.white,
-                                onTap: login,
-                              ),
-                        Gap(20),
+                          text: "Login",
+                          color: Colors.transparent,
+                          textColor: Colors.white,
+                          onTap: login,
+                        ),
+                        const Gap(20),
                         CustomAuthButton(
                           text: "Create Account ?",
                           onTap: () {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SignupView(),
+                                builder: (context) => const SignupView(),
                               ),
                             );
                           },
                         ),
-                        Gap(20),
+                        const Gap(20),
                         TextButton(
                           onPressed: () {
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => Root()),
+                              MaterialPageRoute(
+                                builder: (context) => const Root(),
+                              ),
                             );
                           },
-                          child: CustomText(
+                          child: const CustomText(
                             text: "Continue as guest ?",
                             textColor: Colors.white,
                             textSize: 14,

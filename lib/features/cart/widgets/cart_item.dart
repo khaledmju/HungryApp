@@ -49,38 +49,38 @@ class CartItem extends StatelessWidget {
                       onTap: onAdd,
                       child: CircleAvatar(
                         backgroundColor: AppColors.primary,
-                        child: Icon(Icons.add, color: Colors.white),
+                        child: const Icon(Icons.add, color: Colors.white),
                       ),
                     ),
-                    Gap(20),
+                    const Gap(20),
                     CustomText(
                       text: number,
                       textWeight: FontWeight.w400,
                       textSize: 20,
                     ),
-                    Gap(20),
+                    const Gap(20),
 
                     GestureDetector(
                       onTap: onMin,
                       child: CircleAvatar(
                         backgroundColor: AppColors.primary,
-                        child: Icon(Icons.remove, color: Colors.white),
+                        child: const Icon(Icons.remove, color: Colors.white),
                       ),
                     ),
                   ],
                 ),
-                Gap(26),
+                const Gap(26),
                 GestureDetector(
                   onTap: onRemove,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
                     // height: 45,
                     // width: 130,
                     decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: CustomText(
+                    child: const CustomText(
                       text: "remove",
                       textColor: Colors.white,
                       textSize: 18,

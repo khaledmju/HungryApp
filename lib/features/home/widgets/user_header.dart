@@ -21,8 +21,8 @@ class UserHeader extends StatelessWidget {
               color: AppColors.primary,
               height: 35,
             ),
-            Gap(5),
-            CustomText(
+            const Gap(5),
+            const CustomText(
               text: "Hello, Rich Sonic",
               textSize: 16,
               textWeight: FontWeight.w500,
@@ -30,11 +30,11 @@ class UserHeader extends StatelessWidget {
             ),
           ],
         ),
-        Spacer(),
+        const Spacer(),
         CircleAvatar(
           radius: 31,
           backgroundColor: AppColors.primary,
-          child: Icon(CupertinoIcons.person, color: Colors.white),
+          child: const Icon(CupertinoIcons.person, color: Colors.white),
         ),
       ],
     );

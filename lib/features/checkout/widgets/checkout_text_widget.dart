@@ -20,15 +20,15 @@ class CheckoutTextWidget extends StatelessWidget {
     return Column(
       children: [
         checkOutText("order", order, false, false, false),
-        Gap(10),
+        const Gap(10),
         checkOutText("Taxes", taxes, false, false, false),
-        Gap(10),
+        const Gap(10),
         checkOutText("Delivery fees", deliveryFees, false, false, false),
-        Gap(10),
-        Divider(),
-        Gap(20),
+        const Gap(10),
+        const Divider(),
+        const Gap(20),
         checkOutText("Total:", total, true, false, false),
-        Gap(20),
+        const Gap(20),
         checkOutText(
           "Estimated delivery time:",
           deliveryTime,

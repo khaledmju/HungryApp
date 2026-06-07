@@ -24,7 +24,7 @@ class _RootState extends State<Root> {
   void initState() {
     pageController = PageController(initialPage: selectedScreen);
 
-    screens = [HomeView(), CartView(), OrderHistoryView(), ProfileView()];
+    screens = [const HomeView(), const CartView(), const OrderHistoryView(), const ProfileView()];
     super.initState();
   }
 
@@ -32,16 +32,16 @@ class _RootState extends State<Root> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         children: screens,
       ),
 
       bottomNavigationBar: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: AppColors.primary,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topRight: Radius.circular(30),
             topLeft: Radius.circular(30),
           ),
@@ -60,19 +60,19 @@ class _RootState extends State<Root> {
           },
 
           items: [
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.home),
               label: "Home",
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.cart),
               label: "Cart",
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.local_restaurant_sharp),
               label: "Order History",
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.profile_circled),
               label: "profile",
             ),

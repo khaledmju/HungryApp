@@ -27,7 +27,7 @@ class ToppingCard extends StatelessWidget {
               height: 80,
               width: 110,
               color: color,
-              child: Column(children: []),
+              child: const Column(children: []),
             ),
           ),
 
@@ -56,7 +56,7 @@ class ToppingCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -64,7 +64,7 @@ class ToppingCard extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: onAdd,
-                    child: CircleAvatar(
+                    child: const CircleAvatar(
                       radius: 10,
                       backgroundColor: Colors.red,
                       child: Icon(Icons.add, color: Colors.white, size: 14),

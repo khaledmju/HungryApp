@@ -8,7 +8,7 @@ class OrderHistoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
 
         child: ListView.builder(
           itemCount: 6,

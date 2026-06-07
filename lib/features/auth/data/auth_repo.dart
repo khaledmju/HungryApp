@@ -17,7 +17,6 @@ class AuthRepo {
         "email": email,
         "password": password,
       });
-      print(response);
       if (response is ApiError) {
         throw response;
       }

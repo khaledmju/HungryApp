@@ -16,7 +16,6 @@ class SignupView extends StatelessWidget {
     TextEditingController nameController = TextEditingController();
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
-    TextEditingController confirmPasswordController = TextEditingController();
     GlobalKey<FormState> formKey = GlobalKey();
 
     return GestureDetector(
@@ -28,26 +27,26 @@ class SignupView extends StatelessWidget {
             key: formKey,
             child: Column(
               children: [
-                Gap(200),
+                const Gap(200),
                 SvgPicture.asset(
                   "assets/logo/logo.svg",
                   color: AppColors.primary,
                 ),
-                Gap(10),
+                const Gap(10),
                 CustomText(
                   text: "Welcome to our Food App",
                   textColor: AppColors.primary,
                   textSize: 13,
                   textWeight: FontWeight.w400,
                 ),
-                Gap(100),
+                const Gap(100),
 
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
                       color: AppColors.primary,
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(25),
                         topLeft: Radius.circular(25),
                       ),
@@ -55,26 +54,26 @@ class SignupView extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          Gap(40),
+                          const Gap(40),
 
                           CustomTextField(
                             controller: nameController,
                             hint: "Name",
                             isPassword: false,
                           ),
-                          Gap(20),
+                          const Gap(20),
                           CustomTextField(
                             controller: emailController,
                             hint: "Email Address",
                             isPassword: false,
                           ),
-                          Gap(20),
+                          const Gap(20),
                           CustomTextField(
                             controller: passwordController,
                             hint: "Password",
                             isPassword: true,
                           ),
-                          Gap(40),
+                          const Gap(40),
 
                           CustomAuthButton(
                             text: "SingUp",
@@ -83,18 +82,17 @@ class SignupView extends StatelessWidget {
                             textColor: Colors.white,
                             onTap: () {
                               if (formKey.currentState!.validate()) {
-                                print("object");
                               }
                             },
                           ),
-                          Gap(20),
+                          const Gap(20),
                           CustomAuthButton(
                             text: "Go To Login",
                             onTap: () {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => LoginView(),
+                                  builder: (context) => const LoginView(),
                                 ),
                               );
                             },

@@ -18,13 +18,13 @@ class SearchField extends StatelessWidget {
           filled: true,
           fillColor: Colors.white,
           hintText: 'Search...',
-          prefixIcon: Icon(CupertinoIcons.search),
+          prefixIcon: const Icon(CupertinoIcons.search),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: const BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(15),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: const BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(15),
           ),
         ),

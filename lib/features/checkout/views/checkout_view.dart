@@ -22,7 +22,7 @@ class _CheckoutViewState extends State<CheckoutView> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomSheet: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(30),
@@ -33,11 +33,11 @@ class _CheckoutViewState extends State<CheckoutView> {
           ],
         ),
         height: 100,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(
@@ -69,33 +69,33 @@ class _CheckoutViewState extends State<CheckoutView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomText(
+              const CustomText(
                 text: "Order Summary",
                 textSize: 20,
                 textWeight: FontWeight.bold,
               ),
-              Gap(10),
-              CheckoutTextWidget(
+              const Gap(10),
+              const CheckoutTextWidget(
                 order: "18.32",
                 taxes: "0.3",
                 deliveryFees: "1.5",
                 total: "100",
                 deliveryTime: "15 - 30 mins",
               ),
-              Gap(80),
-              CustomText(
+              const Gap(80),
+              const CustomText(
                 text: "Payment methods",
                 textSize: 20,
                 textWeight: FontWeight.bold,
               ),
-              Gap(20),
+              const Gap(20),
               ListTile(
                 onTap: () {
                   setState(() {
                     selectedMethod = "cash";
                   });
                 },
-                contentPadding: EdgeInsetsDirectional.symmetric(
+                contentPadding: const EdgeInsetsDirectional.symmetric(
                   horizontal: 16,
                   vertical: 15,
                 ),
@@ -104,7 +104,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                   borderRadius: BorderRadiusGeometry.circular(10),
                 ),
                 leading: Image.asset("assets/icons/cash.png"),
-                title: CustomText(
+                title: const CustomText(
                   text: "Cash on Delivery",
                   textSize: 20,
                   textColor: Colors.white,
@@ -116,18 +116,18 @@ class _CheckoutViewState extends State<CheckoutView> {
                       selectedMethod = value!;
                     });
                   },
-                  child: Radio(activeColor: Colors.white, value: "cash"),
+                  child: const Radio(activeColor: Colors.white, value: "cash"),
                 ),
               ),
 
-              Gap(10),
+              const Gap(10),
               ListTile(
                 onTap: () {
                   setState(() {
                     selectedMethod = "visa";
                   });
                 },
-                contentPadding: EdgeInsetsDirectional.symmetric(
+                contentPadding: const EdgeInsetsDirectional.symmetric(
                   horizontal: 16,
                   vertical: 10,
                 ),
@@ -136,7 +136,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                   borderRadius: BorderRadiusGeometry.circular(10),
                 ),
                 leading: Image.asset("assets/icons/visa.png", width: 50),
-                title: CustomText(
+                title: const CustomText(
                   text: "Debit card",
                   textSize: 20,
                   textColor: Colors.black,
@@ -156,7 +156,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                   child: Radio(activeColor: AppColors.primary, value: "visa"),
                 ),
               ),
-              Gap(5),
+              const Gap(5),
               Row(
                 children: [
                   Checkbox(
@@ -168,7 +168,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                       });
                     },
                   ),
-                  CustomText(
+                  const CustomText(
                     text: "Save card details for future payments",
                     textSize: 16,
                     textWeight: FontWeight.w600,

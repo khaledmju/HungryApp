@@ -20,7 +20,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomSheet: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(30),
@@ -31,11 +31,11 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           ],
         ),
         height: 100,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(
@@ -57,7 +57,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
       ),
       appBar: AppBar(scrolledUnderElevation: 0, backgroundColor: Colors.white),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,9 +66,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 onChanged: (value) => setState(() => sliderValue = value),
                 sliderValue: sliderValue,
               ),
-              Gap(50),
-              CustomText(text: "Toppings", textSize: 20),
-              Gap(50),
+              const Gap(50),
+              const CustomText(text: "Toppings", textSize: 20),
+              const Gap(50),
 
               SingleChildScrollView(
                 clipBehavior: Clip.none,
@@ -89,10 +89,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 ),
               ),
 
-              Gap(20),
+              const Gap(20),
 
-              CustomText(text: "Side options", textSize: 20),
-              Gap(50),
+              const CustomText(text: "Side options", textSize: 20),
+              const Gap(50),
 
               SingleChildScrollView(
                 clipBehavior: Clip.none,

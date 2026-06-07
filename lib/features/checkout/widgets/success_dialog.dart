@@ -31,7 +31,7 @@ void showSuccessDialog(BuildContext context) {
                 ),
                 child: const Icon(Icons.check, color: Colors.white, size: 44),
               ),
-              Gap(20),
+              const Gap(20),
 
               CustomText(
                 text: 'Success !',
@@ -39,16 +39,16 @@ void showSuccessDialog(BuildContext context) {
                 textWeight: FontWeight.bold,
                 textSize: 20,
               ),
-              Gap(16),
+              const Gap(16),
 
-              CustomText(
+              const CustomText(
                 text:
                     'Your payment was successful.\nA receipt for this purchase has\nbeen sent to your email.',
                 textSize: 14,
                 textColor: Colors.grey,
               ),
 
-              Gap(20),
+              const Gap(20),
               CustomButton(
                 text: "Close",
                 onTap: () {

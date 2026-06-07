@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 import 'package:hungry/core/constants/app_colors.dart';
 import 'package:hungry/features/auth/widgets/custom_profile_textfield.dart';
 
-import '../../../shared/custom_button.dart';
 import '../../../shared/custom_text.dart';
 
 class ProfileView extends StatefulWidget {
@@ -44,14 +43,14 @@ class _ProfileViewState extends State<ProfileView> {
           scrolledUnderElevation: 0,
           backgroundColor: AppColors.primary,
           actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
               child: Icon(Icons.settings, color: Colors.white),
             ),
           ],
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
 
           child: SingleChildScrollView(
             child: Column(
@@ -68,22 +67,22 @@ class _ProfileViewState extends State<ProfileView> {
                     child: Image.asset("assets/test/test.png"),
                   ),
                 ),
-                Gap(30),
+                const Gap(30),
                 CustomProfileTextField(controller: _name, labelText: "Name"),
-                Gap(30),
+                const Gap(30),
 
                 CustomProfileTextField(controller: _email, labelText: "Email"),
-                Gap(30),
+                const Gap(30),
 
                 CustomProfileTextField(
                   controller: _deliveryAddress,
                   labelText: "Delivery address",
                 ),
-                Gap(30),
-                Divider(),
-                Gap(30),
+                const Gap(30),
+                const Divider(),
+                const Gap(30),
                 ListTile(
-                  contentPadding: EdgeInsetsDirectional.symmetric(
+                  contentPadding: const EdgeInsetsDirectional.symmetric(
                     horizontal: 16,
                     vertical: 10,
                   ),
@@ -92,7 +91,7 @@ class _ProfileViewState extends State<ProfileView> {
                     borderRadius: BorderRadiusGeometry.circular(10),
                   ),
                   leading: Image.asset("assets/icons/visa.png", width: 50),
-                  title: CustomText(
+                  title: const CustomText(
                     text: "Debit card",
                     textSize: 20,
                     textColor: Colors.black,
@@ -102,7 +101,7 @@ class _ProfileViewState extends State<ProfileView> {
                     text: "3566 **** **** 0505",
                     textColor: Colors.grey.shade500,
                   ),
-                  trailing: CustomText(
+                  trailing: const CustomText(
                     text: "Default",
                     textColor: Colors.black,
                     textSize: 14,
@@ -114,7 +113,7 @@ class _ProfileViewState extends State<ProfileView> {
           ),
         ),
         bottomSheet: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             // color: Colors.white,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(30),
@@ -122,21 +121,21 @@ class _ProfileViewState extends State<ProfileView> {
             ),
           ),
           height: 100,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               GestureDetector(
                 onTap: () {},
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   height: 70,
                   // width: 185,
                   decoration: BoxDecoration(
                     color: AppColors.primary,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Row(
+                  child: const Row(
                     children: [
                       CustomText(
                         text: "Edit Profile",
@@ -153,11 +152,11 @@ class _ProfileViewState extends State<ProfileView> {
               GestureDetector(
                 onTap: () {},
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   height: 50,
                   // width: 185,
                   decoration: BoxDecoration(
-                    color: Color(0xffFFFFFF),
+                    color: const Color(0xffFFFFFF),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.black, width: 1.4),
                   ),
@@ -168,7 +167,7 @@ class _ProfileViewState extends State<ProfileView> {
                         textColor: AppColors.primary,
                         textSize: 18,
                       ),
-                      Gap(5),
+                      const Gap(5),
                       Icon(Icons.logout, color: AppColors.primary),
                     ],
                   ),

@@ -16,18 +16,18 @@ class CardItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset("assets/test/test.png", width: 180),
-            Gap(10),
-            CustomText(
+            const Gap(10),
+            const CustomText(
               text: "Cheeseburger",
               textWeight: FontWeight.bold,
               textSize: 16,
             ),
-            CustomText(
+            const CustomText(
               text: "Wendy's Burger",
               textSize: 16,
               textWeight: FontWeight.w400,
             ),
-            CustomText(text: "⭐ 4.9"),
+            const CustomText(text: "⭐ 4.9"),
           ],
         ),
       ),

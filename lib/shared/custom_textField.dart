@@ -44,6 +44,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           return 'please fill ${widget.hint}';
         }
         null;
+        return null;
       },
       controller: widget.controller,
       obscureText: isObscure,
@@ -53,7 +54,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         suffixIcon: widget.isPassword
             ? GestureDetector(
                 onTap: togglePassword,
-                child: Icon(CupertinoIcons.eye),
+                child: const Icon(CupertinoIcons.eye),
               )
             : null,
         filled: true,
@@ -68,7 +69,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   OutlineInputBorder customBorder() {
     return OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white),
+      borderSide:const BorderSide(color: Colors.white),
       borderRadius: BorderRadius.circular(10),
     );
   }

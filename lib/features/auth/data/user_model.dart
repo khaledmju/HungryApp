@@ -26,7 +26,7 @@ class UserModel {
 
       token: json["token"] ?? "",
       image: json["image"] ?? "",
-      visa: json["Visa"] ?? "",
+      visa: json["Visa"] ,
       address: json["address"] ?? "",
     );
   }

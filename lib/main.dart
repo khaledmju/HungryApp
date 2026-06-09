@@ -20,6 +20,9 @@ class MyApp extends StatelessWidget {
       title: 'Hungry',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        textSelectionTheme: const TextSelectionThemeData(
+          selectionHandleColor: Colors.white,
+        ),
         scaffoldBackgroundColor: Colors.white,
         splashColor: Colors.transparent,
       ),

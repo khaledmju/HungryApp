@@ -54,7 +54,7 @@ class DioClient {
           //and if exist send it with request and if not just send the request without token
 
           if (token != null && token.isNotEmpty) {
-            options.headers["Authorization"] = "Bearer$token";
+            options.headers["Authorization"] = "Bearer $token";
           }
 
           return handler.next(options);

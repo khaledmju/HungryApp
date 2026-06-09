@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:hungry/core/constants/app_colors.dart';
 
 class CustomProfileTextField extends StatelessWidget {
-  const CustomProfileTextField({super.key, required this.controller, required this.labelText});
+  const CustomProfileTextField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    this.hintText,
+    this.inputType,
+  });
 
-  final TextEditingController controller ;
-  final String labelText ;
+  final TextEditingController controller;
 
+  final String labelText;
+  final String? hintText;
+  final TextInputType? inputType;
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +22,20 @@ class CustomProfileTextField extends StatelessWidget {
       controller: controller,
       cursorColor: Colors.white,
       cursorHeight: 20,
-      style: const TextStyle(color: Colors.white),
+      style: TextStyle(color: AppColors.primary),
+      keyboardType: inputType,
       decoration: InputDecoration(
-        labelText: 'Name',
-        labelStyle: const TextStyle(color: Colors.white),
+        labelText: labelText,
+        labelStyle: TextStyle(color: AppColors.primary),
+        hintText: hintText,
+        hintStyle: TextStyle(color: AppColors.primary),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.white),
+          borderSide: BorderSide(color: AppColors.primary),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.white),
+          borderSide: BorderSide(color: AppColors.primary),
         ),
       ),
     );

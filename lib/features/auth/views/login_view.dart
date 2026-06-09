@@ -8,6 +8,7 @@ import 'package:hungry/features/auth/data/auth_repo.dart';
 import 'package:hungry/features/auth/views/signup_view.dart';
 import 'package:hungry/features/auth/widgets/custom_auth_button.dart';
 import 'package:hungry/root.dart';
+import 'package:hungry/shared/custom_snackBar.dart';
 import 'package:hungry/shared/custom_text.dart';
 import 'package:hungry/shared/custom_textField.dart';
 
@@ -53,24 +54,15 @@ class _LoginViewState extends State<LoginView> {
           errMas = e.message;
         }
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            clipBehavior: Clip.none,
-            elevation: 10,
-            padding: const EdgeInsets.all(10),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.red.shade900,
-            margin: const EdgeInsets.only(bottom: 30, right: 20, left: 20),
-            content: CustomText(
-              text: errMas,
-              textColor: Colors.white,
-              textWeight: FontWeight.w600,
-              textSize: 14,
-            ),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(customSnackBar(errMas));
       }
     }
+  }
+  @override
+  void initState() {
+    super.initState();
+    emailController.text = "mohe@gmail.com";
+    passwordController.text = "123456789";
   }
 
   @override
@@ -79,34 +71,36 @@ class _LoginViewState extends State<LoginView> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              const Gap(200),
-              SvgPicture.asset(
-                "assets/logo/logo.svg",
-                color: AppColors.primary,
-              ),
-              const Gap(10),
-              CustomText(
-                text: "Welcome Back, Discover Fast Food",
-                textColor: AppColors.primary,
-                textSize: 13,
-                textWeight: FontWeight.w400,
-              ),
-              const Gap(60),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  const Gap(200),
+                  SvgPicture.asset(
+                    "assets/logo/logo.svg",
                     color: AppColors.primary,
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(25),
-                      topLeft: Radius.circular(25),
-                    ),
                   ),
-                  child: SingleChildScrollView(
+                  const Gap(10),
+                  CustomText(
+                    text: "Welcome Back, Discover Fast Food",
+                    textColor: AppColors.primary,
+                    textSize: 13,
+                    textWeight: FontWeight.w400,
+                  ),
+                  const Gap(60),
+                  Container(
+                    padding: const EdgeInsets.only(
+                      left: 15,
+                      right: 15,
+                      bottom: 25,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffC8D0CF),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     child: Column(
                       children: [
                         const Gap(40),
@@ -125,48 +119,56 @@ class _LoginViewState extends State<LoginView> {
 
                         isLoading
                             ? const CupertinoActivityIndicator(
-                          color: Colors.white,
-                        )
+                                color: Colors.white,
+                              )
                             : CustomAuthButton(
-                          text: "Login",
-                          color: Colors.transparent,
-                          textColor: Colors.white,
-                          onTap: login,
-                        ),
-                        const Gap(20),
-                        CustomAuthButton(
-                          text: "Create Account ?",
-                          onTap: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SignupView(),
+                                text: "Login",
+                                textSize: 16,
+                                color: AppColors.primary,
+                                textColor: Colors.white,
+                                isBorder: false,
+                                onTap: login,
                               ),
-                            );
-                          },
-                        ),
                         const Gap(20),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Root(),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomAuthButton(
+                                text: "SingUp",
+                                textSize: 16,
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const SignupView(),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                          child: const CustomText(
-                            text: "Continue as guest ?",
-                            textColor: Colors.white,
-                            textSize: 14,
-                          ),
+                            ),
+                            const Gap(20),
+                            Expanded(
+                              child: CustomAuthButton(
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const Root(),
+                                    ),
+                                  );
+                                },
+                                text: "Guest",
+                                textSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

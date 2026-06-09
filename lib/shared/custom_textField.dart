@@ -63,6 +63,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         enabledBorder: customBorder(),
         focusedBorder: customBorder(),
         errorBorder: customBorder(),
+        focusedErrorBorder: customBorder(),
       ),
     );
   }
@@ -70,7 +71,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   OutlineInputBorder customBorder() {
     return OutlineInputBorder(
       borderSide:const BorderSide(color: Colors.white),
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(20),
     );
   }
 }

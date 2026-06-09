@@ -10,6 +10,8 @@ class CustomAuthButton extends StatelessWidget {
     this.onTap,
     this.color,
     this.textColor,
+    this.textSize,
+    this.isBorder,
   });
 
   final String text;
@@ -18,6 +20,8 @@ class CustomAuthButton extends StatelessWidget {
 
   final Color? color;
   final Color? textColor;
+  final double? textSize;
+  final bool? isBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +33,14 @@ class CustomAuthButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: color ?? Colors.white,
           borderRadius: BorderRadius.circular(7),
-          border: Border.all(color: Colors.white),
+          border: isBorder == true ? Border.all(color: Colors.white) : null,
         ),
         child: Center(
           child: CustomText(
             text: text,
-            textSize: 15,
+            textSize: textSize ?? 15,
             textColor: textColor ?? AppColors.primary,
-            textWeight: FontWeight.w600,
+            textWeight: FontWeight.bold,
           ),
         ),
       ),

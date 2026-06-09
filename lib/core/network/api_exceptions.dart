@@ -11,6 +11,9 @@ class ApiExceptions {
       return ApiError(message: data["message"], statusCode: statusCode);
     }
 
+    if (statusCode == 302) {
+      return ApiError(message: "The email has already been taken");
+    }
     switch (exception.type) {
       case DioExceptionType.connectionTimeout:
         return ApiError(message: "Connection timeout. Please try again.");

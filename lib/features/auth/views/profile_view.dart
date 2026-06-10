@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hungry/core/constants/app_colors.dart';
@@ -6,7 +10,9 @@ import 'package:hungry/features/auth/data/auth_repo.dart';
 import 'package:hungry/features/auth/data/user_model.dart';
 import 'package:hungry/features/auth/views/login_view.dart';
 import 'package:hungry/features/auth/widgets/custom_profile_textfield.dart';
+import 'package:hungry/shared/custom_button.dart';
 import 'package:hungry/shared/custom_snackBar.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../shared/custom_text.dart';
@@ -27,7 +33,8 @@ class _ProfileViewState extends State<ProfileView> {
   final AuthRepo authRepo = AuthRepo();
   UserModel? userModel;
   bool _isLoading = true;
-
+  bool _isLoadingLogout = false;
+  String? selectedImage;
   Future<void> getProfile() async {
     setState(() {
       _isLoading = true;
@@ -56,6 +63,96 @@ class _ProfileViewState extends State<ProfileView> {
     }
   }
 
+  Future<void> uploadImage() async {
+    final pickedImage = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedImage != null) {
+      setState(() {
+        selectedImage = pickedImage.path;
+      });
+    }
+  }
+
+  Future<void> updateProfile() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final user = await authRepo.updateProfile(
+        name: _name.text.trim(),
+        email: _email.text.trim(),
+        address: _deliveryAddress.text.trim(),
+        visa: userModel?.visa ?? _visa.text.trim(),
+        imagePath: selectedImage,
+      );
+
+      setState(() {
+        userModel = user; // تحديث بيانات المستخدم بالبيانات الجديدة
+
+        // إعادة تعبئة الحقول بالبيانات الجديدة القادمة من السيرفر
+        _name.text = userModel?.name ?? "";
+        _email.text = userModel?.email ?? "";
+        _deliveryAddress.text = userModel?.address ?? "";
+
+        // تصفير الصورة المحلية لأنها رُفعت بنجاح والآن سنعرض رابط السيرفر
+        selectedImage = null;
+
+        _isLoading = false;
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(customSnackBar("Profile updated successfully"));
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      String msg = "Error in profile";
+      if (e is ApiError) {
+        msg = e.message;
+      }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(customSnackBar(msg));
+      }
+    }
+  }
+
+  Future<void> logout() async {
+    setState(() {
+      _isLoadingLogout = true;
+    });
+    try {
+      await authRepo.logout();
+      setState(() {
+        _isLoadingLogout = false;
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(customSnackBar("Logout successful"));
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginView()),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        _isLoadingLogout = false;
+      });
+      String msg = "Error in logout";
+      if (e is ApiError) {
+        msg = e.message;
+      }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(customSnackBar(msg));
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -67,7 +164,22 @@ class _ProfileViewState extends State<ProfileView> {
     _name.dispose();
     _email.dispose();
     _deliveryAddress.dispose();
+    _visa.dispose(); // تأكد من عمل dispose لها أيضاً
     super.dispose();
+  }
+
+  // دالة مساعدة لتحديد الصورة المعروضة بشكل ذكي
+  ImageProvider? _getProfileImage() {
+    // 1. إذا اختار المستخدم صورة جديدة من المعرض ولم ترفع بعد
+    if (selectedImage != null) {
+      return FileImage(File(selectedImage!));
+    }
+    // 2. إذا كان هناك صورة قادمة من السيرفر (سواء عند فتح الصفحة أو بعد التحديث)
+    if (userModel?.image != null && userModel!.image!.isNotEmpty) {
+      return NetworkImage(userModel!.image!);
+    }
+    // 3. إذا لم يكن هناك أي صورة
+    return null;
   }
 
   @override
@@ -91,7 +203,6 @@ class _ProfileViewState extends State<ProfileView> {
               ),
             ],
           ),
-
           body: Skeletonizer(
             enabled: _isLoading,
             child: Padding(
@@ -100,35 +211,28 @@ class _ProfileViewState extends State<ProfileView> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
-                    // Gap(200),
-
-                    // Center(
-                    //   child: Container(
-                    //     height: 129,
-                    //     width: 129,
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.grey,
-                    //       borderRadius: BorderRadius.circular(20),
-                    //       border: Border.all(color: Colors.white, width: 5),
-                    //     ),
-                    //     child: _isLoading
-                    //         ? const SizedBox.shrink()
-                    //         : Image.network(userModel!.image!),
-                    //   ),
-                    // ),
-                    Center(
-                      child: _isLoading
-                          ? const CircleAvatar(
-                              radius: 60,
-                              backgroundColor: Colors.white,
+                    // تم تعديل الـ CircleAvatar ليعرض الصورة بشكل صحيح
+                    CircleAvatar(
+                      radius: 70,
+                      backgroundColor: Colors.grey.shade200,
+                      backgroundImage: _getProfileImage(),
+                      child: _getProfileImage() == null
+                          ? const Icon(
+                              Icons.person,
+                              size: 70,
+                              color: Colors.grey,
                             )
-                          : CircleAvatar(
-                              radius: 60,
-                              backgroundColor: Colors.white,
-                              backgroundImage: NetworkImage(userModel!.image!),
-                            ),
+                          : null,
                     ),
-                    const Gap(30),
+                    const Gap(20),
+
+                    CustomButton(
+                      text: "Upload Image",
+                      width: 160,
+                      onTap: uploadImage,
+                    ),
+
+                    const Gap(20),
                     CustomProfileTextField(
                       controller: _name,
                       labelText: "Name",
@@ -155,12 +259,10 @@ class _ProfileViewState extends State<ProfileView> {
                             inputType: const TextInputType.numberWithOptions(),
                           )
                         : ListTile(
-                            contentPadding:
-                                const EdgeInsetsDirectional.symmetric(
-                                  horizontal: 16,
-                                  vertical: 10,
-                                ),
-                            // tileColor: AppColors.grayColor,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
                             tileColor: const Color(0xffEEFBFE),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -168,6 +270,8 @@ class _ProfileViewState extends State<ProfileView> {
                             leading: Image.asset(
                               "assets/icons/visa.png",
                               width: 50,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.credit_card),
                             ),
                             title: const CustomText(
                               text: "Debit card",
@@ -188,78 +292,107 @@ class _ProfileViewState extends State<ProfileView> {
                               textWeight: FontWeight.w500,
                             ),
                           ),
+                    const Gap(20),
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(30),
+                          topLeft: Radius.circular(30),
+                        ),
+                      ),
+                      height: 100,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 20,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          GestureDetector(
+                            onTap: _isLoading
+                                ? null
+                                : updateProfile, // تعطيل الزر أثناء التحميل
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              height: 70,
+                              decoration: BoxDecoration(
+                                color: _isLoading
+                                    ? Colors.grey
+                                    : AppColors.primary,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  const CustomText(
+                                    text: "Edit Profile",
+                                    textColor: Colors.white,
+                                    textSize: 18,
+                                  ),
+                                  const Gap(5),
+                                  _isLoading
+                                      ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CupertinoActivityIndicator(
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : const Icon(
+                                          Icons.edit,
+                                          color: Colors.white,
+                                        ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: _isLoading ? null : logout,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffFFFFFF),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1.4,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  CustomText(
+                                    text: "Logout",
+                                    textColor: AppColors.primary,
+                                    textSize: 18,
+                                  ),
+                                  const Gap(5),
+                                  _isLoadingLogout == true
+                                      ? SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CupertinoActivityIndicator(
+                                            color: AppColors.primary,
+                                          ),
+                                        )
+                                      : Icon(
+                                          Icons.logout,
+                                          color: AppColors.primary,
+                                        ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ),
-          ),
-          bottomSheet: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(30),
-                topLeft: Radius.circular(30),
-              ),
-            ),
-            height: 100,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                GestureDetector(
-                  onTap: _isLoading ? null : () {}, // Disable when loading
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    height: 70,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Row(
-                      children: [
-                        CustomText(
-                          text: "Edit Profile",
-                          textColor: Colors.white,
-                          textSize: 18,
-                        ),
-                        Gap(5),
-                        Icon(Icons.edit, color: Colors.white),
-                      ],
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: _isLoading
-                      ? null
-                      : () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) => const LoginView(),
-                            ),
-                          );
-                        },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffFFFFFF),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black, width: 1.4),
-                    ),
-                    child: Row(
-                      children: [
-                        CustomText(
-                          text: "Logout",
-                          textColor: AppColors.primary,
-                          textSize: 18,
-                        ),
-                        const Gap(5),
-                        Icon(Icons.logout, color: AppColors.primary),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
             ),
           ),
         ),

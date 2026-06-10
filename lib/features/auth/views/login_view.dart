@@ -43,6 +43,7 @@ class _LoginViewState extends State<LoginView> {
             context,
             MaterialPageRoute(builder: (context) => const Root()),
           );
+          ScaffoldMessenger.of(context).showSnackBar(customSnackBar("Login successful"));
         }
         setState(() => isLoading = false);
       } catch (e) {

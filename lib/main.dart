@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hungry/core/constants/app_colors.dart';
 import 'package:hungry/splash.dart';
 
 void main() async {
@@ -20,8 +21,8 @@ class MyApp extends StatelessWidget {
       title: 'Hungry',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        textSelectionTheme: const TextSelectionThemeData(
-          selectionHandleColor: Colors.white,
+        textSelectionTheme:  TextSelectionThemeData(
+          selectionHandleColor:AppColors.primary,
         ),
         scaffoldBackgroundColor: Colors.white,
         splashColor: Colors.transparent,

@@ -23,12 +23,12 @@ tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
 
-// Add this block right here:
+// Forces Gradle to use a stable, cached annotation library version
 subprojects {
     configurations.all {
         resolutionStrategy.eachDependency {
-            if (requested.group == "androidx.datastore") {
-                useVersion("1.1.1")
+            if (requested.group == "androidx.annotation" && requested.name == "annotation") {
+                useVersion("1.9.0")
             }
         }
     }

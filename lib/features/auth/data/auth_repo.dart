@@ -84,8 +84,6 @@ class AuthRepo {
           throw ApiError(message: msg);
         }
 
-
-
         final user = UserModel.fromJson(data);
 
         if (user.token != null) {
@@ -121,5 +119,59 @@ class AuthRepo {
 
   ///update profile
 
+  // Future
+  Future<UserModel?> updateProfile({
+    required String name,
+    required String email,
+    required String address,
+    String? visa,
+    String? imagePath,
+  }) async {
+    try {
+      final formData = FormData.fromMap({
+        "name": name,
+        "email": email,
+        "address": address,
+        if (visa != null && visa.isNotEmpty) "Visa": visa,
+
+        if (imagePath != null && imagePath.isNotEmpty)
+          "image": await MultipartFile.fromFile(
+            imagePath,
+            filename: "profile.jpg",
+          ),
+      });
+      print(imagePath);
+
+      final response = await _apiService.postData("/update-profile", formData);
+      print(response);
+      if (response is ApiError) {
+        throw response;
+      }
+      if (response is Map<String, dynamic>) {
+        final code = response["code"];
+        final msg = response["message"];
+        final data = response["data"];
+
+        if (code != 200 && data == null) {
+          throw ApiError(message: msg);
+        }
+
+        final user = UserModel.fromJson(data);
+        return user;
+      } else {
+        throw ApiError(message: "UnExpected Error ");
+      }
+    } on DioException catch (e) {
+      throw ApiExceptions.handelError(e);
+    } catch (e) {
+      throw ApiError(message: e.toString());
+    }
+  }
+
   ///logout
+  Future<void> logout() async {
+    final response = await _apiService.postData("/logout", {});
+    print(response);
+    await PrefHelper.clearToken();
+  }
 }

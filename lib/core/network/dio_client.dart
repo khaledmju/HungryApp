@@ -53,7 +53,7 @@ class DioClient {
           // here we tell the dio about the type of token like bearer token and ......
           //and if exist send it with request and if not just send the request without token
 
-          if (token != null && token.isNotEmpty) {
+          if (token != null && token.isNotEmpty && token != "guest") {
             options.headers["Authorization"] = "Bearer $token";
           }
 

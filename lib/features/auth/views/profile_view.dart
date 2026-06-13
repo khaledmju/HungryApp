@@ -35,6 +35,8 @@ class _ProfileViewState extends State<ProfileView> {
   bool _isLoading = true;
   bool _isLoadingLogout = false;
   String? selectedImage;
+  bool isGuest = false;
+
   Future<void> getProfile() async {
     setState(() {
       _isLoading = true;
@@ -153,9 +155,18 @@ class _ProfileViewState extends State<ProfileView> {
     }
   }
 
+  Future<void> autoLogin() async {
+    final user = await authRepo.autoLogin();
+    setState(() => isGuest = authRepo.isGuest);
+    if (user != null) {
+      setState(() => userModel = user);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    autoLogin();
     getProfile();
   }
 
@@ -184,219 +195,242 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      backgroundColor: AppColors.primary,
-      color: Colors.white,
-      displacement: 60,
-      onRefresh: () async => await getProfile(),
-      child: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            scrolledUnderElevation: 0,
+    if (!isGuest) {
+      return RefreshIndicator(
+        backgroundColor: AppColors.primary,
+        color: Colors.white,
+        displacement: 60,
+        onRefresh: () async => await getProfile(),
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Scaffold(
             backgroundColor: Colors.white,
-            actions: [
-              Padding(
+            appBar: AppBar(
+              scrolledUnderElevation: 0,
+              backgroundColor: Colors.white,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Icon(Icons.settings, color: AppColors.primary),
+                ),
+              ],
+            ),
+            body: Skeletonizer(
+              enabled: _isLoading,
+              child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Icon(Icons.settings, color: AppColors.primary),
-              ),
-            ],
-          ),
-          body: Skeletonizer(
-            enabled: _isLoading,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  children: [
-                    // تم تعديل الـ CircleAvatar ليعرض الصورة بشكل صحيح
-                    CircleAvatar(
-                      radius: 70,
-                      backgroundColor: Colors.grey.shade200,
-                      backgroundImage: _getProfileImage(),
-                      child: _getProfileImage() == null
-                          ? const Icon(
-                              Icons.person,
-                              size: 70,
-                              color: Colors.grey,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      // تم تعديل الـ CircleAvatar ليعرض الصورة بشكل صحيح
+                      CircleAvatar(
+                        radius: 70,
+                        backgroundColor: Colors.grey.shade200,
+                        backgroundImage: _getProfileImage(),
+                        child: _getProfileImage() == null
+                            ? const Icon(
+                                Icons.person,
+                                size: 70,
+                                color: Colors.grey,
+                              )
+                            : null,
+                      ),
+                      const Gap(20),
+
+                      CustomButton(
+                        text: "Upload Image",
+                        width: 160,
+                        onTap: uploadImage,
+                      ),
+
+                      const Gap(20),
+                      CustomProfileTextField(
+                        controller: _name,
+                        labelText: "Name",
+                      ),
+                      const Gap(30),
+                      CustomProfileTextField(
+                        controller: _email,
+                        labelText: "Email",
+                      ),
+                      const Gap(30),
+                      CustomProfileTextField(
+                        controller: _deliveryAddress,
+                        labelText: "Delivery address",
+                      ),
+                      const Gap(30),
+                      const Divider(),
+                      const Gap(30),
+
+                      userModel?.visa == null || userModel!.visa!.isEmpty
+                          ? CustomProfileTextField(
+                              controller: _visa,
+                              labelText: "Visa",
+                              hintText: "ADD VISA CARD",
+                              inputType:
+                                  const TextInputType.numberWithOptions(),
                             )
-                          : null,
-                    ),
-                    const Gap(20),
-
-                    CustomButton(
-                      text: "Upload Image",
-                      width: 160,
-                      onTap: uploadImage,
-                    ),
-
-                    const Gap(20),
-                    CustomProfileTextField(
-                      controller: _name,
-                      labelText: "Name",
-                    ),
-                    const Gap(30),
-                    CustomProfileTextField(
-                      controller: _email,
-                      labelText: "Email",
-                    ),
-                    const Gap(30),
-                    CustomProfileTextField(
-                      controller: _deliveryAddress,
-                      labelText: "Delivery address",
-                    ),
-                    const Gap(30),
-                    const Divider(),
-                    const Gap(30),
-
-                    userModel?.visa == null || userModel!.visa!.isEmpty
-                        ? CustomProfileTextField(
-                            controller: _visa,
-                            labelText: "Visa",
-                            hintText: "ADD VISA CARD",
-                            inputType: const TextInputType.numberWithOptions(),
-                          )
-                        : ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 10,
-                            ),
-                            tileColor: const Color(0xffEEFBFE),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            leading: Image.asset(
-                              "assets/icons/visa.png",
-                              width: 50,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.credit_card),
-                            ),
-                            title: const CustomText(
-                              text: "Debit card",
-                              textSize: 20,
-                              textColor: Colors.black,
-                              textWeight: FontWeight.w500,
-                            ),
-                            subtitle: CustomText(
-                              text: _isLoading
-                                  ? "xxxx **** **** xxxx"
-                                  : (userModel?.visa ?? ""),
-                              textColor: Colors.grey.shade500,
-                            ),
-                            trailing: const CustomText(
-                              text: "Default",
-                              textColor: Colors.black,
-                              textSize: 14,
-                              textWeight: FontWeight.w500,
-                            ),
-                          ),
-                    const Gap(20),
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30),
-                          topLeft: Radius.circular(30),
-                        ),
-                      ),
-                      height: 100,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 20,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          GestureDetector(
-                            onTap: _isLoading
-                                ? null
-                                : updateProfile, // تعطيل الزر أثناء التحميل
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
+                          : ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
                               ),
-                              height: 70,
-                              decoration: BoxDecoration(
-                                color: _isLoading
-                                    ? Colors.grey
-                                    : AppColors.primary,
+                              tileColor: const Color(0xffEEFBFE),
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Row(
-                                children: [
-                                  const CustomText(
-                                    text: "Edit Profile",
-                                    textColor: Colors.white,
-                                    textSize: 18,
-                                  ),
-                                  const Gap(5),
-                                  _isLoading
-                                      ? const SizedBox(
-                                          width: 20,
-                                          height: 20,
-                                          child: CupertinoActivityIndicator(
+                              leading: Image.asset(
+                                "assets/icons/visa.png",
+                                width: 50,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Icon(Icons.credit_card),
+                              ),
+                              title: const CustomText(
+                                text: "Debit card",
+                                textSize: 20,
+                                textColor: Colors.black,
+                                textWeight: FontWeight.w500,
+                              ),
+                              subtitle: CustomText(
+                                text: _isLoading
+                                    ? "xxxx **** **** xxxx"
+                                    : (userModel?.visa ?? ""),
+                                textColor: Colors.grey.shade500,
+                              ),
+                              trailing: const CustomText(
+                                text: "Default",
+                                textColor: Colors.black,
+                                textSize: 14,
+                                textWeight: FontWeight.w500,
+                              ),
+                            ),
+                      const Gap(20),
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(30),
+                            topLeft: Radius.circular(30),
+                          ),
+                        ),
+                        height: 100,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 20,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            GestureDetector(
+                              onTap: _isLoading
+                                  ? null
+                                  : updateProfile, // تعطيل الزر أثناء التحميل
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                height: 70,
+                                decoration: BoxDecoration(
+                                  color: _isLoading
+                                      ? Colors.grey
+                                      : AppColors.primary,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const CustomText(
+                                      text: "Edit Profile",
+                                      textColor: Colors.white,
+                                      textSize: 18,
+                                    ),
+                                    const Gap(5),
+                                    _isLoading
+                                        ? const SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CupertinoActivityIndicator(
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        : const Icon(
+                                            Icons.edit,
                                             color: Colors.white,
                                           ),
-                                        )
-                                      : const Icon(
-                                          Icons.edit,
-                                          color: Colors.white,
-                                        ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: _isLoading ? null : logout,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ),
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffFFFFFF),
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: Colors.black,
-                                  width: 1.4,
+                                  ],
                                 ),
                               ),
-                              child: Row(
-                                children: [
-                                  CustomText(
-                                    text: "Logout",
-                                    textColor: AppColors.primary,
-                                    textSize: 18,
+                            ),
+                            GestureDetector(
+                              onTap: _isLoading ? null : logout,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffFFFFFF),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: Colors.black,
+                                    width: 1.4,
                                   ),
-                                  const Gap(5),
-                                  _isLoadingLogout == true
-                                      ? SizedBox(
-                                          width: 20,
-                                          height: 20,
-                                          child: CupertinoActivityIndicator(
+                                ),
+                                child: Row(
+                                  children: [
+                                    CustomText(
+                                      text: "Logout",
+                                      textColor: AppColors.primary,
+                                      textSize: 18,
+                                    ),
+                                    const Gap(5),
+                                    _isLoadingLogout == true
+                                        ? SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CupertinoActivityIndicator(
+                                              color: AppColors.primary,
+                                            ),
+                                          )
+                                        : Icon(
+                                            Icons.logout,
                                             color: AppColors.primary,
                                           ),
-                                        )
-                                      : Icon(
-                                          Icons.logout,
-                                          color: AppColors.primary,
-                                        ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("Guest Mode"),
+            const Gap(20),
+            CustomButton(
+              text: "Go To Login",
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginView()),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

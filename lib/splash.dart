@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:hungry/core/constants/app_colors.dart';
+import 'package:hungry/core/utils/pref_helper.dart';
+import 'package:hungry/features/auth/data/auth_repo.dart';
 import 'package:hungry/features/auth/views/login_view.dart';
+import 'package:hungry/root.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -12,26 +15,55 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+  AuthRepo authRepo = AuthRepo();
+
+  Future<void> _checkLogin() async {
+    final user = await authRepo.autoLogin();
+
+    if (user != null) {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => const Root(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 600),
+        ),
+      );
+    } else if (authRepo.isGuest) {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => const Root(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 600),
+        ),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const LoginView(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 600),
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
 
-    Future.delayed(
-      const Duration(milliseconds: 2500),
-          () => Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => const LoginView(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-          transitionDuration: const Duration(milliseconds: 600),
-        ),
-      ),
-    );
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      _checkLogin();
+    });
   }
 
   @override
@@ -40,9 +72,11 @@ class _SplashViewState extends State<SplashView> {
       backgroundColor: AppColors.primary,
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Cleanly pushes elements apart
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // Cleanly pushes elements apart
           children: [
-            const Gap(150), // Reduced slightly to ensure it fits nicely on smaller screens
+            const Gap(150),
+            // Reduced slightly to ensure it fits nicely on smaller screens
 
             // 1. Logo Animation
             TweenAnimationBuilder<double>(

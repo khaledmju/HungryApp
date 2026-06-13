@@ -7,7 +7,7 @@ class PrefHelper {
 
   static Future<void> saveToken(String token) async {
     final pref = await SharedPreferences.getInstance();
-    pref.setString(_tokenKey, token);
+    await pref.setString(_tokenKey, token);
   }
 
   static Future<String?> getToken() async {
@@ -17,7 +17,7 @@ class PrefHelper {
 
   static Future<void> clearToken() async {
     final pref = await SharedPreferences.getInstance();
-    pref.remove(_tokenKey);
+    await pref.remove(_tokenKey);
   }
 }
 
@@ -48,8 +48,6 @@ class PrefHelper {
 //     await _pref.remove(_tokenKey);
 //   }
 // }
-
-
 
 // void main() async {
 //   WidgetsFlutterBinding.ensureInitialized();

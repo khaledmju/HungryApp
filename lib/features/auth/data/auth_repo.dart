@@ -9,6 +9,10 @@ import 'package:hungry/features/auth/data/user_model.dart';
 class AuthRepo {
   final ApiService _apiService = ApiService();
 
+  bool isGuest = false;
+
+  UserModel? _currentUser;
+
   ///login
 
   Future<UserModel?> login(String email, String password) async {
@@ -32,7 +36,6 @@ class AuthRepo {
         if (code != 200 || data == null) {
           throw ApiError(message: msg);
         }
-        //
         final user = UserModel.fromJson(data);
 
         // save token
@@ -40,6 +43,8 @@ class AuthRepo {
           await PrefHelper.saveToken(user.token!);
         }
 
+        isGuest = false;
+        _currentUser = user;
         return user;
       } else {
         throw ApiError(message: "UnExpected Error From Server");
@@ -89,7 +94,8 @@ class AuthRepo {
         if (user.token != null) {
           PrefHelper.saveToken(user.token!);
         }
-
+        isGuest = false;
+        _currentUser = user;
         return user;
       } else {
         throw ApiError(message: "UnExpected Error ");
@@ -105,10 +111,16 @@ class AuthRepo {
 
   Future<UserModel?> getProfile() async {
     try {
+      final token = await PrefHelper.getToken();
+
+      if (token == null || token == "guest") {
+        return null;
+      }
+
       final response = await _apiService.getData("/profile");
 
       final user = UserModel.fromJson(response["data"]);
-
+      _currentUser = user;
       return user;
     } on DioException catch (e) {
       throw ApiExceptions.handelError(e);
@@ -140,10 +152,8 @@ class AuthRepo {
             filename: "profile.jpg",
           ),
       });
-      print(imagePath);
 
       final response = await _apiService.postData("/update-profile", formData);
-      print(response);
       if (response is ApiError) {
         throw response;
       }
@@ -157,6 +167,7 @@ class AuthRepo {
         }
 
         final user = UserModel.fromJson(data);
+        _currentUser = user;
         return user;
       } else {
         throw ApiError(message: "UnExpected Error ");
@@ -173,5 +184,39 @@ class AuthRepo {
     final response = await _apiService.postData("/logout", {});
     print(response);
     await PrefHelper.clearToken();
+    _currentUser = null;
+    isGuest = true;
   }
+
+  /// guest
+  Future<void> continueAsGuest() async {
+    isGuest = true;
+    _currentUser = null;
+    await PrefHelper.saveToken("guest");
+  }
+
+  /// auto login
+  Future<UserModel?> autoLogin() async {
+    final token = await PrefHelper.getToken();
+
+    if (token == null || token == "guest") {
+      isGuest = true;
+      _currentUser = null;
+      return null;
+    }
+    try {
+      final user = await getProfile();
+      _currentUser = user;
+      return user;
+    } catch (e) {
+      await PrefHelper.clearToken();
+      isGuest = true;
+      _currentUser = null;
+      return null;
+    }
+  }
+
+  UserModel? get currentUser => _currentUser;
+
+  bool get isLoggedIn => !isGuest && _currentUser != null;
 }

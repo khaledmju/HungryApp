@@ -6,7 +6,7 @@ class CustomText extends StatelessWidget {
     required this.text,
     this.textColor,
     this.textSize,
-    this.textWeight,
+    this.textWeight, this.textMaxLine,
   });
 
   final String text;
@@ -16,11 +16,13 @@ class CustomText extends StatelessWidget {
   final double? textSize;
 
   final FontWeight? textWeight;
+  final int? textMaxLine;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
+      maxLines: textMaxLine,
       style: TextStyle(
         color: textColor,
         fontSize: textSize,

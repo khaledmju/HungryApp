@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
+import 'package:hungry/features/home/data/product_model.dart';
 import '../../../shared/custom_text.dart';
 
 class CardItem extends StatelessWidget {
-  const CardItem({super.key});
+
+  const CardItem({super.key, required this.productModel});
+
+  final ProductModel productModel;
 
   @override
   Widget build(BuildContext context) {
@@ -15,19 +18,26 @@ class CardItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset("assets/test/test.png", width: 180),
+            (productModel.image == "")
+                ? Image.asset("assets/test/test.png")
+                : Image.network(
+                    productModel.image,
+                    width: 180,
+                    fit: BoxFit.cover,
+                  ),
             const Gap(10),
-            const CustomText(
-              text: "Cheeseburger",
+            CustomText(
+              text: productModel.name,
               textWeight: FontWeight.bold,
               textSize: 16,
             ),
-            const CustomText(
-              text: "Wendy's Burger",
+            CustomText(
+              text: productModel.desc,
               textSize: 16,
               textWeight: FontWeight.w400,
+              textMaxLine: 4,
             ),
-            const CustomText(text: "⭐ 4.9"),
+            CustomText(text: "⭐ ${productModel.rate}"),
           ],
         ),
       ),

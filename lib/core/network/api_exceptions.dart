@@ -24,6 +24,11 @@ class ApiExceptions {
       case DioExceptionType.receiveTimeout:
         return ApiError(message: "Response TimeOut , Please try again");
 
+      case DioExceptionType.connectionError:
+        return ApiError(
+          message: "Check Connection to InterNet , Please try again",
+        );
+
       default:
         return ApiError(message: "something went wrong");
     }

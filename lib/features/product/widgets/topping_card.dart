@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:hungry/shared/custom_text.dart';
 
 class ToppingCard extends StatelessWidget {
   final String imageUrl;
@@ -18,62 +20,33 @@ class ToppingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onAdd,
-      child: Stack(
-        clipBehavior: Clip.none,
+      child: Column(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(12),
             child: Container(
-              height: 80,
-              width: 110,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               color: color,
-              child: const Column(children: []),
-            ),
-          ),
-
-          Positioned(
-            top: -40,
-            right: -5,
-            left: -5,
-            child: SizedBox(
-              height: 80,
-              width: 70,
-              child: Card(
-                color: Colors.white,
-                child: Image.asset(imageUrl, fit: BoxFit.contain),
-              ),
-            ),
-          ),
-
-          Positioned(
-            bottom: 0,
-            right: 0,
-            left: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  Image.network(
+                    imageUrl,
+                    width: 80,
+                    height: 50,
+                    fit: BoxFit.contain,
                   ),
-                  GestureDetector(
-                    onTap: onAdd,
-                    child: const CircleAvatar(
-                      radius: 10,
-                      backgroundColor: Colors.red,
-                      child: Icon(Icons.add, color: Colors.white, size: 14),
-                    ),
+                  const Gap(10),
+                  CustomText(
+                    text: title,
+                    textColor: Colors.black,
+                    textSize: 14,
+                    textWeight: FontWeight.w600,
                   ),
                 ],
               ),
             ),
           ),
+          const Gap(5),
         ],
       ),
     );

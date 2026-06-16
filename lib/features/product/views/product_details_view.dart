@@ -1,9 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hungry/core/constants/app_colors.dart';
+import 'package:hungry/core/network/api_error.dart';
+import 'package:hungry/core/network/api_exceptions.dart';
+import 'package:hungry/features/product/data/product_details_repo.dart';
+import 'package:hungry/features/product/data/toppings_model.dart';
 import 'package:hungry/features/product/widgets/spicy_slider.dart';
 import 'package:hungry/features/product/widgets/topping_card.dart';
 import 'package:hungry/shared/custom_button.dart';
+import 'package:hungry/shared/custom_snackBar.dart';
 import 'package:hungry/shared/custom_text.dart';
 
 class ProductDetailsView extends StatefulWidget {
@@ -15,6 +21,65 @@ class ProductDetailsView extends StatefulWidget {
 
 class _ProductDetailsViewState extends State<ProductDetailsView> {
   double sliderValue = 0;
+
+  ProductDetailsRepo productDetailsRepo = ProductDetailsRepo();
+
+  List<ToppingsModel>? toppingsList = [];
+  List<ToppingsModel>? sideOptionsList = [];
+
+  int? isSelectedToppings;
+
+  int? isSelectedOption;
+
+  bool isLoadingToppings = true;
+  bool isLoadingSideOption = true;
+
+  Future<void> getToppings() async {
+    try {
+      final productToppings = await productDetailsRepo.getToppings();
+
+      setState(() {
+        toppingsList = productToppings;
+        isLoadingToppings = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoadingToppings = false;
+      });
+      String msg = "Error in Getting Toppings";
+      if (e is ApiError) {
+        msg = e.message;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(customSnackBar(msg));
+    }
+  }
+
+  Future<void> getSideOptions() async {
+    try {
+      final sideOptions = await productDetailsRepo.getSideOptions();
+
+      setState(() {
+        sideOptionsList = sideOptions;
+        isLoadingSideOption = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoadingSideOption = false;
+      });
+      String msg = "Error in Getting Toppings";
+      if (e is ApiError) {
+        msg = e.message;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(customSnackBar(msg));
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getToppings();
+    getSideOptions();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,48 +135,68 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
               const CustomText(text: "Toppings", textSize: 20),
               const Gap(50),
 
-              SingleChildScrollView(
-                clipBehavior: Clip.none,
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(
-                    6,
-                    (index) => Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: ToppingCard(
-                        imageUrl: "assets/test/tomato.png",
-                        title: "Tomato",
-                        onAdd: () {},
-                        color: AppColors.toppingColor,
+              isLoadingToppings
+                  ? CupertinoActivityIndicator(
+                      color: AppColors.primary,
+                      radius: 15,
+                    )
+                  : SingleChildScrollView(
+                      clipBehavior: Clip.none,
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(toppingsList!.length, (index) {
+                          final topping = toppingsList![index];
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: ToppingCard(
+                              imageUrl: topping.image,
+                              title: topping.name,
+                              onAdd: () {
+                                setState(() => isSelectedToppings = index);
+                              },
+                              color: isSelectedToppings == index
+                                  ? Colors.green.withOpacity(0.2)
+                                  : AppColors.primary.withOpacity(0.1),
+                            ),
+                          );
+                        }),
                       ),
                     ),
-                  ),
-                ),
-              ),
 
               const Gap(20),
 
               const CustomText(text: "Side options", textSize: 20),
               const Gap(50),
 
-              SingleChildScrollView(
-                clipBehavior: Clip.none,
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(
-                    6,
-                    (index) => Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: ToppingCard(
-                        imageUrl: "assets/test/tomato.png",
-                        title: "Tomato",
-                        onAdd: () {},
-                        color: AppColors.toppingColor,
+              isLoadingSideOption
+                  ? CupertinoActivityIndicator(
+                      color: AppColors.primary,
+                      radius: 15,
+                    )
+                  : SingleChildScrollView(
+                      clipBehavior: Clip.none,
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(sideOptionsList!.length, (
+                          index,
+                        ) {
+                          final sideOption = sideOptionsList![index];
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: ToppingCard(
+                              imageUrl: sideOption.image,
+                              title: sideOption.name,
+                              onAdd: () {
+                                setState(() => isSelectedOption = index);
+                              },
+                              color: isSelectedOption == index
+                                  ? Colors.green.withOpacity(0.2)
+                                  : AppColors.primary.withOpacity(0.1),
+                            ),
+                          );
+                        }),
                       ),
                     ),
-                  ),
-                ),
-              ),
               // Gap(50),
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.spaceBetween,

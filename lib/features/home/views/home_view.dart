@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:hungry/core/constants/app_colors.dart';
 import 'package:hungry/core/network/api_error.dart';
 import 'package:hungry/features/home/data/home_repo.dart';
 import 'package:hungry/features/home/data/product_model.dart';

@@ -41,6 +41,7 @@ dependencies:
   skeletonizer: ^2.1.3
   image_picker: ^1.2.2
   cached_network_image: ^3.4.1
+  lottie: ^3.3.3
 
 dev_dependencies:
   flutter_test:
@@ -72,7 +73,10 @@ flutter:
     - assets/test/
     - assets/details/
     - assets/icons/
-
+    - assets/banner/
+    - assets/lottie/
+    - assets/3dModel/
+    - assets/appIcon/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

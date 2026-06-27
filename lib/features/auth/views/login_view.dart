@@ -12,6 +12,9 @@ import 'package:hungry/shared/custom_snackBar.dart';
 import 'package:hungry/shared/custom_text.dart';
 import 'package:hungry/shared/custom_textField.dart';
 
+import '../../../shared/custom_button.dart';
+import '../../../shared/glass_container.dart';
+
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
@@ -43,7 +46,9 @@ class _LoginViewState extends State<LoginView> {
             context,
             MaterialPageRoute(builder: (context) => const Root()),
           );
-          ScaffoldMessenger.of(context).showSnackBar(customSnackBar("Login successful"));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(customSnackBar("Login successful"));
         }
         setState(() => isLoading = false);
       } catch (e) {
@@ -59,6 +64,7 @@ class _LoginViewState extends State<LoginView> {
       }
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -69,106 +75,104 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: SingleChildScrollView(
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  const Gap(200),
-                  SvgPicture.asset(
-                    "assets/logo/logo.svg",
-                    color: AppColors.primary,
+      onTap: FocusScope.of(context).unfocus,
+      child: glassContainer(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const Gap(140),
+                Banner(
+                  color: Colors.green.shade700,
+                  message: 'Rich Sonic',
+                  location: BannerLocation.topStart,
+                  child: SvgPicture.asset(
+                    'assets/logo/logo.svg',
+                    color: Colors.white70,
                   ),
-                  const Gap(10),
-                  CustomText(
-                    text: "Welcome Back, Discover Fast Food",
-                    textColor: AppColors.primary,
-                    textSize: 13,
-                    textWeight: FontWeight.w400,
-                  ),
-                  const Gap(60),
-                  Container(
-                    padding: const EdgeInsets.only(
-                      left: 15,
-                      right: 15,
-                      bottom: 25,
+                ),
+                const Gap(10),
+                const CustomText(
+                  text: 'Welcome Back, Discover The Fast Food',
+                  textColor: Colors.white70,
+                  textSize: 13,
+                  textWeight: FontWeight.w500,
+                ),
+                const Gap(50),
+                Column(
+                  children: [
+                    CustomTextField(
+                      controller: emailController,
+                      hint: 'Email Address',
+                      isPassword: false,
                     ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xffC8D0CF),
-                      borderRadius: BorderRadius.circular(20),
+                    const Gap(10),
+                    CustomTextField(
+                      controller: passwordController,
+                      hint: 'Password',
+                      isPassword: true,
                     ),
-                    child: Column(
+                    const Gap(20),
+                    CustomButton(
+                      // height: 45,
+                      // gap: 10,
+                      text: 'Login',
+                      color: Colors.white.withOpacity(0.9),
+                      textColor: AppColors.primary,
+                      widget: isLoading
+                          ? CupertinoActivityIndicator(color: AppColors.primary)
+                          : null,
+                      onTap: login,
+                    ),
+                    const Gap(20),
+                    Row(
                       children: [
-                        const Gap(40),
-                        CustomTextField(
-                          controller: emailController,
-                          hint: "Email Address",
-                          isPassword: false,
-                        ),
-                        const Gap(20),
-                        CustomTextField(
-                          controller: passwordController,
-                          hint: "Password",
-                          isPassword: true,
-                        ),
-                        const Gap(40),
+                        Expanded(
+                          child: CustomAuthButton(
+                            text: 'Signup',
+                            textColor: Colors.black,
 
-                        isLoading
-                            ? const CupertinoActivityIndicator(
-                                color: Colors.white,
-                              )
-                            : CustomAuthButton(
-                                text: "Login",
-                                textSize: 16,
-                                color: AppColors.primary,
-                                textColor: Colors.white,
-                                isBorder: false,
-                                onTap: login,
-                              ),
-                        const Gap(20),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: CustomAuthButton(
-                                text: "SingUp",
-                                textSize: 16,
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const SignupView(),
-                                    ),
-                                  );
-                                },
+                            onTap: () => Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const SignupView(),
                               ),
                             ),
-                            const Gap(20),
-                            Expanded(
-                              child: CustomAuthButton(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const Root(),
-                                    ),
-                                  );
-                                },
-                                text: "Guest",
-                                textSize: 16,
-                              ),
+                          ),
+                        ),
+                        const Gap(15),
+                        Expanded(
+                          child: CustomAuthButton(
+                            text: 'Guest',
+                            // isIcon: true,
+                            textColor: Colors.black,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => Root()),
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
+                  ],
+                ),
+
+                const Spacer(),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 55),
+                  child: Center(
+                    child: CustomText(
+                      textSize: 12,
+                      textColor: Colors.white,
+                      text: '@RichSonic2025',
+                      textWeight: FontWeight.bold,
+                    ),
                   ),
-                ],
-              ),
+                ),
+                Gap(30),
+              ],
             ),
           ),
         ),

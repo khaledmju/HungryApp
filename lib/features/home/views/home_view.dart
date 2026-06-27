@@ -26,6 +26,9 @@ class _HomeViewState extends State<HomeView> {
   HomeRepo homeRepo = HomeRepo();
 
   List<ProductModel> productList = [];
+  List<ProductModel> allProducts = [];
+
+  TextEditingController controller = TextEditingController();
 
   bool isLoading = true;
 
@@ -35,6 +38,7 @@ class _HomeViewState extends State<HomeView> {
 
       setState(() {
         productList = products;
+        allProducts = products;
         isLoading = false;
       });
     } catch (e) {
@@ -63,7 +67,7 @@ class _HomeViewState extends State<HomeView> {
         child: Scaffold(
           body: CustomScrollView(
             slivers: [
-              const SliverAppBar(
+              SliverAppBar(
                 backgroundColor: Colors.white,
                 pinned: true,
                 elevation: 0,
@@ -72,9 +76,27 @@ class _HomeViewState extends State<HomeView> {
                 toolbarHeight: 160,
                 automaticallyImplyLeading: false,
                 flexibleSpace: Padding(
-                  padding: EdgeInsets.only(top: 45, right: 20, left: 20),
+                  padding: const EdgeInsets.only(top: 45, right: 20, left: 20),
                   child: Column(
-                    children: [UserHeader(), Gap(20), SearchField()],
+                    children: [
+                      const UserHeader(),
+                      const Gap(20),
+                      SearchField(
+                        controller: controller,
+                        onChanged: (value) {
+                          final query = value.toLowerCase();
+                          setState(() {
+                            productList = allProducts
+                                .where(
+                                  (element) => element.name
+                                      .toLowerCase()
+                                      .contains(query),
+                                )
+                                .toList();
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),

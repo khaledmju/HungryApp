@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hungry/core/constants/app_colors.dart';
 import 'package:hungry/core/network/api_error.dart';
-import 'package:hungry/core/network/api_exceptions.dart';
+import 'package:hungry/features/cart/data/cart_model.dart';
+import 'package:hungry/features/cart/data/cart_repo.dart';
 import 'package:hungry/features/product/data/product_details_repo.dart';
 import 'package:hungry/features/product/data/toppings_model.dart';
 import 'package:hungry/features/product/widgets/spicy_slider.dart';
@@ -13,23 +14,33 @@ import 'package:hungry/shared/custom_snackBar.dart';
 import 'package:hungry/shared/custom_text.dart';
 
 class ProductDetailsView extends StatefulWidget {
-  const ProductDetailsView({super.key});
+  const ProductDetailsView({
+    super.key,
+    required this.image,
+    required this.productId,
+  });
+
+  final String image;
+
+  final int productId;
 
   @override
   State<ProductDetailsView> createState() => _ProductDetailsViewState();
 }
 
 class _ProductDetailsViewState extends State<ProductDetailsView> {
-  double sliderValue = 0;
+  double sliderValue = 0.1;
 
   ProductDetailsRepo productDetailsRepo = ProductDetailsRepo();
+  CartRepo cartRepo = CartRepo();
 
   List<ToppingsModel>? toppingsList = [];
   List<ToppingsModel>? sideOptionsList = [];
 
-  int? isSelectedToppings;
+  List<int> emptyToppingsList = [];
+  List<int> emptyOptionsList = [];
 
-  int? isSelectedOption;
+  bool isLoading = false;
 
   bool isLoadingToppings = true;
   bool isLoadingSideOption = true;
@@ -116,7 +127,44 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
               ],
             ),
 
-            CustomButton(text: "Add To Cart", onTap: () {}),
+            isLoading
+                ? CupertinoActivityIndicator(color: AppColors.primary)
+                : CustomButton(
+                    text: "Add To Cart",
+                    onTap: () async {
+                      try {
+                        setState(() => isLoading = true);
+                        final cart = CartModel(
+                          productId: widget.productId,
+                          quantity: 1,
+                          spicy: sliderValue,
+                          sideOptions: emptyOptionsList,
+                          toppings: emptyToppingsList,
+                        );
+
+                        await cartRepo.addToCart(
+                          CartRequestModel(items: [cart]),
+                        );
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(customSnackBar("Added To Cart"));
+                        setState(() => isLoading = false);
+                      } catch (e) {
+                        setState(() => isLoading = false);
+                        String msg = "error in details";
+
+                        if (e is ApiError) {
+                          setState(() {
+                            msg = e.message;
+                          });
+                        }
+
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(customSnackBar(msg));
+                      }
+                    },
+                  ),
           ],
         ),
       ),
@@ -128,12 +176,13 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SpicySlider(
+                image: widget.image,
                 onChanged: (value) => setState(() => sliderValue = value),
                 sliderValue: sliderValue,
               ),
-              const Gap(50),
+              const Gap(30),
               const CustomText(text: "Toppings", textSize: 20),
-              const Gap(50),
+              const Gap(10),
 
               isLoadingToppings
                   ? CupertinoActivityIndicator(
@@ -146,15 +195,24 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       child: Row(
                         children: List.generate(toppingsList!.length, (index) {
                           final topping = toppingsList![index];
+                          final isSelectedTopping = emptyToppingsList.contains(
+                            topping.id,
+                          );
                           return Padding(
                             padding: const EdgeInsets.only(right: 10),
                             child: ToppingCard(
                               imageUrl: topping.image,
                               title: topping.name,
                               onAdd: () {
-                                setState(() => isSelectedToppings = index);
+                                setState(() {
+                                  if (!isSelectedTopping) {
+                                    emptyToppingsList.add(topping.id);
+                                  } else {
+                                    emptyToppingsList.remove(topping.id);
+                                  }
+                                });
                               },
-                              color: isSelectedToppings == index
+                              color: isSelectedTopping
                                   ? Colors.green.withOpacity(0.2)
                                   : AppColors.primary.withOpacity(0.1),
                             ),
@@ -166,7 +224,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
               const Gap(20),
 
               const CustomText(text: "Side options", textSize: 20),
-              const Gap(50),
+              const Gap(10),
 
               isLoadingSideOption
                   ? CupertinoActivityIndicator(
@@ -181,15 +239,24 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                           index,
                         ) {
                           final sideOption = sideOptionsList![index];
+                          final isSelectedOption = emptyOptionsList.contains(
+                            sideOption.id,
+                          );
                           return Padding(
                             padding: const EdgeInsets.only(right: 10),
                             child: ToppingCard(
                               imageUrl: sideOption.image,
                               title: sideOption.name,
                               onAdd: () {
-                                setState(() => isSelectedOption = index);
+                                setState(() {
+                                  if (!isSelectedOption) {
+                                    emptyOptionsList.add(sideOption.id);
+                                  } else {
+                                    emptyOptionsList.remove(sideOption.id);
+                                  }
+                                });
                               },
-                              color: isSelectedOption == index
+                              color: isSelectedOption
                                   ? Colors.green.withOpacity(0.2)
                                   : AppColors.primary.withOpacity(0.1),
                             ),

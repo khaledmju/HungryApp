@@ -40,7 +40,10 @@ class DioClient {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: "https://sonic-zdi0.onrender.com/api",
-      headers: {"Content_Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
     ),
   );
 

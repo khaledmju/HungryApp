@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -33,11 +34,18 @@ class CartItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(image, width: 100),
+                CachedNetworkImage(
+                  imageUrl: image,
+                  width: 100,
+                  errorWidget: (context, url, error) =>
+                      Image.asset("assets/test/test.png", width: 100),
+                ),
 
+                // Image.asset(image, width: 100),
                 CustomText(text: title, textWeight: FontWeight.bold),
-                CustomText(text: desc),
+                CustomText(text: "Spicy : $desc"),
               ],
             ),
 
@@ -73,7 +81,10 @@ class CartItem extends StatelessWidget {
                 GestureDetector(
                   onTap: onRemove,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 35,
+                      vertical: 15,
+                    ),
                     // height: 45,
                     // width: 130,
                     decoration: BoxDecoration(

@@ -5,6 +5,8 @@ import 'package:hungry/features/auth/views/profile_view.dart';
 import 'package:hungry/features/cart/views/cart_view.dart';
 import 'package:hungry/features/home/views/home_view.dart';
 import 'package:hungry/features/orderHistory/views/order_history_view.dart';
+import 'package:hungry/shared/custom_text.dart';
+import 'package:hungry/shared/glass_nav.dart';
 
 class Root extends StatefulWidget {
   const Root({super.key});
@@ -41,98 +43,37 @@ class _RootState extends State<Root> {
     return Scaffold(
       // extendBody allows the PageView content to flow completely behind the nav bar area
       extendBody: true,
-      body: Stack(
-        children: [
-          PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: screens,
+      body: IndexedStack(index: selectedScreen, children: screens),
+      bottomNavigationBar: GlassBottomNavBar(
+        currentIndex: selectedScreen,
+        onTap: (value) {
+          setState(() {
+            selectedScreen = value;
+          });
+        },
+        items: [
+          BottomNavItemData(
+            label: 'Home',
+            icon: const Icon(CupertinoIcons.home),
+            filledIcon: const Icon(CupertinoIcons.house_fill),
           ),
-
-          // Floating Blurred Navigation Bar
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              // Controls the floating gap on the bottom, left, and right sides
-              padding: const EdgeInsets.only(
-                bottom: 20.0,
-                left: 24.0,
-                right: 24.0,
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(
-                  40,
-                ), // Gives it the pill shape
-                child: BackdropFilter(
-                  // This creates the glassmorphism/blur effect
-                  filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
-                  child: Container(
-                    height: 80,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    // Light, translucent white color acting as the glass overlay
-                    color: Colors.white.withOpacity(0.4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildNavItem(CupertinoIcons.home, "Home", 0),
-                        _buildNavItem(CupertinoIcons.cart, "Cart", 1),
-                        _buildNavItem(
-                          Icons.table_restaurant_outlined,
-                          "History",
-                          2,
-                        ),
-                        _buildNavItem(
-                          CupertinoIcons.person_circle,
-                          "Profile",
-                          3,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+          BottomNavItemData(
+            label: 'Cart',
+            icon: const Icon(CupertinoIcons.cart),
+            filledIcon: const Badge(
+              label: CustomText(text: '1', textSize: 10),
+              child: Icon(CupertinoIcons.cart_fill_badge_plus),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, int index) {
-    final isSelected = selectedScreen == index;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() => selectedScreen = index);
-        pageController.jumpToPage(index);
-      },
-      behavior: HitTestBehavior.opaque,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // The dark oval background highlight for the active item
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? Colors.black.withOpacity(0.12)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Icon(
-              icon,
-              color: isSelected ? Colors.black87 : Colors.black45,
-              size: 26,
-            ),
+          BottomNavItemData(
+            label: 'History',
+            icon: const Icon(Icons.table_bar_outlined),
+            filledIcon: const Icon(Icons.table_bar_rounded),
           ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              color: isSelected ? Colors.black87 : Colors.black45,
-            ),
+          BottomNavItemData(
+            label: 'Profile',
+            icon: const Icon(CupertinoIcons.person_alt_circle),
+            filledIcon: const Icon(Icons.person),
           ),
         ],
       ),

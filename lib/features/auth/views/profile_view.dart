@@ -325,7 +325,7 @@ class _ProfileViewState extends State<ProfileView> {
                             GestureDetector(
                               onTap: _isLoading
                                   ? null
-                                  : updateProfile, // تعطيل الزر أثناء التحميل
+                                  : updateProfile,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 20,

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -9,9 +10,11 @@ class SpicySlider extends StatefulWidget {
     super.key,
     required this.sliderValue,
     required this.onChanged,
+    required this.image,
   });
 
   final double sliderValue;
+  final String image;
   final void Function(double) onChanged;
 
   @override
@@ -21,18 +24,19 @@ class SpicySlider extends StatefulWidget {
 class _SpicySliderState extends State<SpicySlider> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset("assets/details/details.png", height: 250),
+        // Image.asset("assets/details/details.png", height: 250),
+        CachedNetworkImage(imageUrl: widget.image,height: 200,),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CustomText(
-              text:
-                  "Customize Your Burger\n to Your Tastes.\n Ultimate Experience",
-            ),
-            const Gap(20),
+            // const CustomText(
+            //   text:
+            //       "Customize Your Burger\n to Your Tastes.\n Ultimate Experience",
+            // ),
+            // // const Gap(20),
             const CustomText(
               text: "Spicy",
               textWeight: FontWeight.bold,
@@ -50,9 +54,10 @@ class _SpicySliderState extends State<SpicySlider> {
             ),
             const Row(
               mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomText(text: "🥶"),
-                Gap(150),
+                // Gap(150),
                 CustomText(text: "🌶"),
               ],
             ),

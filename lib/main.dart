@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
       title: 'Hungry',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        textSelectionTheme:  TextSelectionThemeData(
-          selectionHandleColor:AppColors.primary,
+        textSelectionTheme: TextSelectionThemeData(
+          selectionHandleColor: AppColors.primary,
         ),
         scaffoldBackgroundColor: Colors.white,
         splashColor: Colors.transparent,
